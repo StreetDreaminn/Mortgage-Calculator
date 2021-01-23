@@ -1,0 +1,61 @@
+package com.Franklin;
+
+import java.text.NumberFormat;
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        // Link to formula calculating mortgage: https://www.wikihow.com/Calculate-Mortgage-Payments
+
+        // Firstly initialise the 3 variables required in calculating a mortgage:
+        // 1. Principal - How much you are borrowing.
+        // 2. Annual interest rate.
+        // 3. Period.
+
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Principal (£1K - £1M): ");
+        int principle = scanner.nextInt();
+
+        while (principle < 1_000 || principle > 1_000_000){
+            System.out.println("Enter a number between 1,000 and 1,000,000");
+            System.out.print("Principal (£1K - £1M): ");
+            principle = scanner.nextInt();
+        }
+
+        System.out.print("Annual Interest Rate: ");
+        float annualInterestRate = scanner.nextFloat();
+
+        while (annualInterestRate <= 0 || annualInterestRate >= 30){
+            System.out.println("Enter a value greater than 0 and less than or equal to 30.");
+            annualInterestRate = scanner.nextFloat();
+        }
+
+        float monthlyInterestRate = (annualInterestRate / 100) / 12;
+
+        System.out.print("Period (Years): ");
+        int years = scanner.nextInt();
+
+        while (years < 1 || years > 30){
+            System.out.println("Enter a value between 1 and 30.");
+            years = scanner.nextInt();
+        }
+
+        int numberOfPayments = years * 12;
+
+        // Then model the formula, using the previously initialised variables. To make it easier to read, I split
+        // the calculations up.
+
+        double numerator = monthlyInterestRate * Math.pow((1 + monthlyInterestRate), numberOfPayments);
+        double denominator = Math.pow((1 + monthlyInterestRate),numberOfPayments) - 1;
+        double mortgage = principle * (numerator / denominator);
+
+        // Finally, we use the format method to format the value properly.
+
+        NumberFormat currencyInstance = NumberFormat.getCurrencyInstance();
+        String mortgageFormat = currencyInstance.format(mortgage);
+        System.out.println("Mortgage: " + mortgageFormat);
+    }
+}
